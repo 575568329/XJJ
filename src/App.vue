@@ -6,7 +6,7 @@ import config from './config.js'
 const mode = ref(config.mode)
 
 // 当前视频类型
-const currentType = ref(mode.value === 'simple' ? 'BianZhuang' : config.videoTypes[0].value)
+const currentType = ref(mode.value === 'simple' ? 'ChuanDa' : config.videoTypes[0].value)
 
 // 视频URL
 const videoUrl = ref('')
