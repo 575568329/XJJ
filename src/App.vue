@@ -14,6 +14,12 @@ const videoUrl = ref('')
 // 加载状态
 const loading = ref(false)
 
+// 错误状态
+const error = ref(false)
+
+// 错误信息
+const errorMessage = ref('')
+
 // 视频类型列表（从配置文件读取）
 const videoTypes = config.videoTypes
 
@@ -28,6 +34,9 @@ const isUtools = computed(() => {
 // 加载视频
 const loadVideo = () => {
   loading.value = true
+  error.value = false
+  errorMessage.value = ''
+
   // 添加时间戳防止缓存
   const timestamp = Date.now()
   videoUrl.value = `http://api.mmp.cc/api/ksvideo?type=mp4&id=${currentType.value}&t=${timestamp}`
@@ -37,9 +46,13 @@ const loadVideo = () => {
   if (video) {
     video.onloadeddata = () => {
       loading.value = false
+      error.value = false
     }
     video.onerror = () => {
       loading.value = false
+      error.value = true
+      errorMessage.value = '视频加载失败，请点击换一个重试'
+      console.error('视频加载失败')
     }
   }
 }
@@ -99,6 +112,11 @@ const closeRewardModal = () => {
         <div v-if="loading" class="loading-overlay">
           <div class="spinner"></div>
           <p>加载中...</p>
+        </div>
+        <div v-if="error" class="error-overlay" @click="loadVideo">
+          <div class="error-icon">⚠️</div>
+          <p>{{ errorMessage }}</p>
+          <p class="error-hint">点击重试</p>
         </div>
         <video
           id="videoPlayer"
@@ -252,6 +270,39 @@ const closeRewardModal = () => {
   to {
     transform: rotate(360deg);
   }
+}
+
+.error-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.85);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  z-index: 10;
+  cursor: pointer;
+}
+
+.error-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.error-overlay p {
+  margin: 0.5rem 0;
+  text-align: center;
+  font-size: 1rem;
+}
+
+.error-hint {
+  font-size: 0.85rem;
+  opacity: 0.7;
+  margin-top: 1rem;
 }
 
 .controls {
