@@ -3,7 +3,7 @@ export default {
   // 模式选择：'simple'（极简模式）或 'premium'（付费模式）
   // 极简模式：只能看变装类型的小姐姐短视频
   // 付费模式：可以切换所有类型的小姐姐短视频
-  mode: 'premium',
+  mode: 'simple',
 
   // 可用的视频类型列表
   videoTypes: [
